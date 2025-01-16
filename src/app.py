@@ -5,7 +5,7 @@ from langchain_openai import ChatOpenAI
 
 
 
-def main():
+def app():
     print("Hello, World!")
 
     if not os.environ.get("OPENAI_API_KEY"):
@@ -16,4 +16,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    app()
