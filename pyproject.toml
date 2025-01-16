@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "brewlang"
+version = "0.1.0"
+description = "A brief description of the project"
+authors = ["Gian <giancolombi@gmail.com>"]
+license = "MIT"
+package-mode = false
+
+# Optional: Specify dependencies if you want to include them in the template
+[tool.poetry.dependencies]
+python = "^3.13"
+requests = "^2.26"  # Example dependency
+openai = "*"
+langchain-openai = "^0.3"
+langchain = "^0.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^6.2"  # Example testing dependency
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

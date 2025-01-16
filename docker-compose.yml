@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  brewlang:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.localdev  # Explicitly reference the .env file
+    volumes:
+      - .:/app
+    command: poetry run python src/app.py
