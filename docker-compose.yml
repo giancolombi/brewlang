@@ -6,5 +6,4 @@ services:
     env_file:
       - .env.localdev  # Explicitly reference the .env file
     volumes:
-      - .:/app
-    command: poetry run python src/app.py
+      - ./static:/app/static

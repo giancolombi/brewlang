@@ -13,8 +13,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the pyproject.toml and poetry.lock files (if present)
-COPY pyproject.toml poetry.lock* /app/
-
+COPY pyproject.toml poetry.lock* /app/  
+COPY src /app/src
+COPY static /app/static
 # Install the Python dependencies defined by Poetry
 RUN poetry install --no-root
 
@@ -24,5 +25,8 @@ COPY . /app/
 # Expose the port that your service will run on
 EXPOSE 8000
 
+# Set working directory inside `src`
+WORKDIR /app/src
+
 # Set the default command to run your service
-CMD ["poetry", "run", "python", "src/app.py"]
+CMD ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

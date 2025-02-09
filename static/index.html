@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangChain Chat</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: auto; text-align: center; }
+        input, button { padding: 10px; margin: 10px; width: 80%; }
+        #chatbox { border: 1px solid #ccc; padding: 10px; min-height: 200px; text-align: left; }
+        .message { margin: 5px 0; }
+        .user { color: blue; }
+        .ai { color: green; }
+    </style>
+</head>
+<body>
+    <h2>Brew AI</h2>
+    <div id="chatbox"></div>
+    <input type="text" id="userInput" placeholder="Type your message..." onkeypress="handleKeyPress(event)"/>
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        async function sendMessage() {
+            let inputField = document.getElementById("userInput");
+            let chatbox = document.getElementById("chatbox");
+
+            let userMessage = inputField.value.trim();
+            if (!userMessage) return;
+
+            chatbox.innerHTML += `<p class="message user"><strong>You:</strong> ${userMessage}</p>`;
+            inputField.value = "";
+
+            // Show loading message
+            let loadingMessage = document.createElement("p");
+            loadingMessage.classList.add("message", "ai");
+            loadingMessage.innerHTML = "<strong>AI:</strong> Thinking...";
+            chatbox.appendChild(loadingMessage);
+
+            try {
+                let response = await fetch("/query/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_input: userMessage }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Server error: " + response.status);
+                }
+
+                let result = await response.json();
+                loadingMessage.innerHTML = `<strong>AI:</strong> ${result.response}`;
+            } catch (error) {
+                loadingMessage.innerHTML = `<strong>AI:</strong> Error: ${error.message}`;
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

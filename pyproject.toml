@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "brewlang"
 version = "0.1.0"
-description = "A brief description of the project"
+description = "Brew is a pesonalized chatbot to help you make the best of you home coffee brewing."
 authors = ["Gian <giancolombi@gmail.com>"]
 license = "MIT"
 package-mode = false
@@ -9,14 +9,20 @@ package-mode = false
 # Optional: Specify dependencies if you want to include them in the template
 [tool.poetry.dependencies]
 python = "^3.13"
-requests = "^2.26"  # Example dependency
+requests = "^2.26"
 openai = "*"
 langchain-openai = "^0.3"
 langchain = "^0.3"
+langchain_community = "^0.3"
+fastapi = "^0"
+uvicorn = "^0"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^6.2"  # Example testing dependency
+pytest = "^6.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "src:main:app"
