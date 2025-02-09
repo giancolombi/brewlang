@@ -67,10 +67,7 @@ def tool_chain(user_input: str, config: RunnableConfig):
         tool_msgs = tool.batch(ai_msg.tool_calls, config=config)
         logger.info(f"Tool responses: {[msg.content for msg in tool_msgs]}")
 
-        final_response = llm_chain.invoke({**input_, "messages": [ai_msg, *tool_msgs]}, config=config)
-        logger.info(f"Final AI response: {final_response.content}")
-
-        return final_response
+        return ai_msg
     except Exception as e:
         logger.error(f"Error processing input: {e}", exc_info=True)
         raise e
