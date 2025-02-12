@@ -69,10 +69,13 @@ def tool_chain(user_input: str, config: RunnableConfig):
         ai_msg = llm_chain.invoke(input_, config=config)
         logger.info(f"AI model response: {ai_msg.content}")
 
-        tool_msgs = tool.batch(ai_msg.tool_calls, config=config)
-        logger.info(f"Tool responses: {[msg.content for msg in tool_msgs]}")
+        # Step 2: If the tool was called, fetch results
+        if ai_msg.tool_calls:
 
-        return llm_chain.invoke({**input_, "messages": [ai_msg, *tool_msgs]}, config=config)
+            tool_msgs = tool.batch(ai_msg.tool_calls, config=config)
+            logger.info(f"Tool responses: {[msg.content for msg in tool_msgs]}")
+            return llm_chain.invoke({**input_, "messages": [ai_msg, *tool_msgs]}, config=config)
+        return ai_msg
     except Exception as e:
         logger.error(f"Error processing input: {e}", exc_info=True)
         raise e
