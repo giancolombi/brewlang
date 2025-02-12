@@ -35,7 +35,7 @@ if not os.environ.get("TAVILY_API_KEY"):
 model = ChatOpenAI(model="gpt-4o-mini")
 today = datetime.datetime.today().strftime("%D")
 
-prompt = ChatPromptTemplate(
+prompt = ChatPromptTemplate.from_messages(
     [
         ("system", f"You are a helpful home coffee brewing assistant. The date today is {today}."),
         ("human", "{user_input}"),
@@ -49,6 +49,11 @@ tool = TavilySearchResults(
     include_answer=True,
     include_raw_content=True,
     include_images=True,
+    # include_domains=[...],
+    # exclude_domains=[...],
+    # name="...",            # overwrite default tool name
+    # description="...",     # overwrite default tool description
+    # args_schema=...,       # overwrite default args_schema: BaseModel
 )
 
 # Bind tool to the model
@@ -67,7 +72,7 @@ def tool_chain(user_input: str, config: RunnableConfig):
         tool_msgs = tool.batch(ai_msg.tool_calls, config=config)
         logger.info(f"Tool responses: {[msg.content for msg in tool_msgs]}")
 
-        return ai_msg
+        return llm_chain.invoke({**input_, "messages": [ai_msg, *tool_msgs]}, config=config)
     except Exception as e:
         logger.error(f"Error processing input: {e}", exc_info=True)
         raise e
