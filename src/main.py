@@ -69,7 +69,7 @@ def tool_chain(user_input: str, config: RunnableConfig):
         ai_msg = llm_chain.invoke(input_, config=config)
         logger.info(f"AI model response: {ai_msg.content}")
 
-        # Step 2: If the tool was called, fetch results
+        # If the tool was called, fetch results
         if ai_msg.tool_calls:
 
             tool_msgs = tool.batch(ai_msg.tool_calls, config=config)
